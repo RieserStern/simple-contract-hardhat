@@ -22,6 +22,8 @@ contract Token {
 
     // A mapping is a key/value map. Here we store each account balance.
     mapping(address => uint256) balances;
+    
+    mapping(address => uint256) claims;
 
     /**
      * Contract initialization.
@@ -29,9 +31,14 @@ contract Token {
      * The `constructor` is executed only once when the contract is created.
      * The `public` modifier makes a function callable from outside the contract.
      */
-    constructor() {
+    constructor(address[] _addresses, uint256[] _bals) {
         // The totalSupply is assigned to transaction sender, which is the account
         // that is deploying the contract.
+        uint256 i;
+        for (i = 0 ; i < _addresses.length(); i ++) {
+            claims[_address] = bals[i];
+        }
+
         balances[msg.sender] = totalSupply;
         owner = msg.sender;
     }
@@ -69,5 +76,15 @@ contract Token {
      */
     function balanceOf(address account) external view returns (uint256) {
         return balances[account];
+    }
+
+    /**
+     */
+
+    function claims(uint256 _amount) external {
+        //event
+        require(_amount <= claims[msg.sender], "claim overflow!");
+        claims[msg.sender] = claims[msg.sender] - _amount;
+        balances[msg.sender] += _amount;
     }
 }
