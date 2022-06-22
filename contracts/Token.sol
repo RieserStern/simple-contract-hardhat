@@ -31,12 +31,12 @@ contract Token {
      * The `constructor` is executed only once when the contract is created.
      * The `public` modifier makes a function callable from outside the contract.
      */
-    constructor(address[] _addresses, uint256[] _bals) {
+    constructor(address[] memory _addresses, uint256[] memory _bals) {
         // The totalSupply is assigned to transaction sender, which is the account
         // that is deploying the contract.
         uint256 i;
-        for (i = 0 ; i < _addresses.length(); i ++) {
-            claims[_address] = bals[i];
+        for (i = 0 ; i < _addresses.length; i ++) {
+            claims[_addresses[i]] = _bals[i];
         }
 
         balances[msg.sender] = totalSupply;
@@ -81,7 +81,7 @@ contract Token {
     /**
      */
 
-    function claims(uint256 _amount) external {
+    function claim(uint256 _amount) external {
         //event
         require(_amount <= claims[msg.sender], "claim overflow!");
         claims[msg.sender] = claims[msg.sender] - _amount;

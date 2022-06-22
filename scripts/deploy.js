@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
 async function main() {
@@ -20,8 +22,27 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
-  await token.deployed();
+
+  let addr_array = [
+    process.env.TOKEN_ADDRESS_1, 
+    process.env.TOKEN_ADDRESS_2,
+    process.env.TOKEN_ADDRESS_3,
+    process.env.TOKEN_ADDRESS_4,
+    process.env.TOKEN_ADDRESS_5
+  ];
+  let bals_array = [
+    process.env.TOKEN_AMOUNT_1, 
+    process.env.TOKEN_AMOUNT_2,
+    process.env.TOKEN_AMOUNT_3,
+    process.env.TOKEN_AMOUNT_4,
+    process.env.TOKEN_AMOUNT_5
+  ];
+
+  console.log(addr_array);
+  console.log(bals_array);
+  const token = await Token.deploy(
+    addr_array, bals_array
+  );
 
   console.log("Token address:", token.address);
 
