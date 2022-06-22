@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // This is an example test file. Hardhat will run every *.js file in `test/`,
 // so feel free to add new ones.
 
@@ -29,18 +31,34 @@ describe("Token contract", function () {
   let addr1;
   let addr2;
   let addrs;
+  
+  
+  let addr_array = [];
+  let bals_array = [];
 
   // `beforeEach` will run before each test, re-deploying the contract every
   // time. It receives a callback, which can be async.
   beforeEach(async function () {
     // Get the ContractFactory and Signers here.
     Token = await ethers.getContractFactory("Token");
-    [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+    [owner, addr0, addr1, addr2, addr3, addr4, ...addrs] = await ethers.getSigners();
+
+    addr_array = [
+      addr0.address, addr1.address, addr2.address, addr3.address, addr4.address
+    ];
+    bals_array = [
+      process.env.TOKEN_AMOUNT_1, 
+      process.env.TOKEN_AMOUNT_2,
+      process.env.TOKEN_AMOUNT_3,
+      process.env.TOKEN_AMOUNT_4,
+      process.env.TOKEN_AMOUNT_5
+    ];
+
 
     // To deploy our contract, we just have to call Token.deploy() and await
     // for it to be deployed(), which happens onces its transaction has been
     // mined.
-    hardhatToken = await Token.deploy();
+    hardhatToken = await Token.deploy(addr_array, bals_array);
 
     // We can interact with the contract by calling `hardhatToken.method()`
     await hardhatToken.deployed();
@@ -129,5 +147,23 @@ describe("Token contract", function () {
       );
       expect(addr2Balance).to.equal(50);
     });
+
+  });
+
+
+  // You can nest describe calls to create subsections.
+  describe("Claim", function () {
+    it("Should get amount after claim", async function() {
+      
+      let address_1_claimAmount = await hardhatToken.getClaimAmount(addr_array[0]);
+      expect(address_1_claimAmount).to.equal(process.env.TOKEN_AMOUNT_1);
+
+      console.log(address_1_claimAmount);
+
+      await hardhatToken.connect(addr0).claim(500);
+
+      address_1_claimAmount = await hardhatToken.getClaimAmount(addr_array[0]);
+      expect(address_1_claimAmount).to.equal(process.env.TOKEN_AMOUNT_1 - 500);
+    })
   });
 });

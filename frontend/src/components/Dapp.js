@@ -14,8 +14,10 @@ import contractAddress from "../contracts/contract-address.json";
 import { NoWalletDetected } from "./NoWalletDetected";
 import { ConnectWallet } from "./ConnectWallet";
 import { Loading } from "./Loading";
-import { Transfer } from "./Transfer";
+// import { Transfer } from "./Transfer";
+import { Claim } from './Claim'
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
+import { ClaimErrorMessage } from './ClaimErrorMessage';
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { NoTokensMessage } from "./NoTokensMessage";
 
@@ -54,6 +56,9 @@ export class Dapp extends React.Component {
       txBeingSent: undefined,
       transactionError: undefined,
       networkError: undefined,
+
+      clBeingSent: undefined,
+      claimError: undefined,
     };
 
     this.state = this.initialState;
@@ -75,7 +80,7 @@ export class Dapp extends React.Component {
     // clicks a button. This callback just calls the _connectWallet method.
     if (!this.state.selectedAddress) {
       return (
-        <ConnectWallet 
+        <ConnectWallet
           connectWallet={() => this._connectWallet()} 
           networkError={this.state.networkError}
           dismiss={() => this._dismissNetworkError()}
@@ -124,10 +129,16 @@ export class Dapp extends React.Component {
               Sending a transaction can fail in multiple ways. 
               If that happened, we show a message here.
             */}
-            {this.state.transactionError && (
+            {/* {this.state.transactionError && (
               <TransactionErrorMessage
                 message={this._getRpcErrorMessage(this.state.transactionError)}
                 dismiss={() => this._dismissTransactionError()}
+              />
+            )} */}
+            {this.state.claimError && (
+              <ClaimErrorMessage
+                message={this._getRpcErrorMessage(this.state.claimError)}
+                dismiss={() => this._dismissClaimError()}
               />
             )}
           </div>
@@ -138,9 +149,9 @@ export class Dapp extends React.Component {
             {/*
               If the user has no tokens, we don't show the Transfer form
             */}
-            {this.state.balance.eq(0) && (
+            {/* {this.state.balance.eq(0) && (
               <NoTokensMessage selectedAddress={this.state.selectedAddress} />
-            )}
+            )} */}
 
             {/*
               This component displays a form that the user can use to send a 
@@ -148,16 +159,22 @@ export class Dapp extends React.Component {
               The component doesn't have logic, it just calls the transferTokens
               callback.
             */}
-            {this.state.balance.gt(0) && (
+            {/* {this.state.balance.gt(0) && (
               <Transfer
                 transferTokens={(to, amount) =>
                   this._transferTokens(to, amount)
                 }
                 tokenSymbol={this.state.tokenData.symbol}
               />
-            )}
+            )} */}
+            <Claim
+              claimTokens={(amount) =>
+                this._claimTokens(amount)
+              }
+            />
           </div>
         </div>
+
       </div>
     );
   }
@@ -330,9 +347,41 @@ export class Dapp extends React.Component {
     }
   }
 
+  async _claimTokens(amount) {
+    try {
+
+      const cl = await this._token.claim(amount);
+      this.setState({ clBeingSent: cl.hash });
+
+      const receipt = await cl.wait();
+
+      if (receipt.status === 0) {
+        throw new Error("Claim failed");
+      }
+
+      await this._updateBalance();
+
+    } catch (error) {
+
+      if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
+        return;
+      }
+
+      console.error(error);
+      this.setState({ transactionError: error });
+    } finally {
+      this.setState({ clBeingSent: undefined });
+    }
+  }
+
   // This method just clears part of the state.
   _dismissTransactionError() {
     this.setState({ transactionError: undefined });
+  }
+
+  // This method just clears part of the state.
+  _dismissClaimError() {
+    this.setState({ claimError: undefined });
   }
 
   // This method just clears part of the state.

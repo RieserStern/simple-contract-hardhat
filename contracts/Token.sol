@@ -23,6 +23,7 @@ contract Token {
     // A mapping is a key/value map. Here we store each account balance.
     mapping(address => uint256) balances;
     
+    // A mapping is a values of claims for each account
     mapping(address => uint256) claims;
 
     /**
@@ -79,6 +80,7 @@ contract Token {
     }
 
     /**
+     * Claim given amount to msg.sender address
      */
 
     function claim(uint256 _amount) external {
@@ -86,5 +88,12 @@ contract Token {
         require(_amount <= claims[msg.sender], "claim overflow!");
         claims[msg.sender] = claims[msg.sender] - _amount;
         balances[msg.sender] += _amount;
+    }
+
+    /**
+     * Read only function to get the amount of token is claimable for given account
+     */
+    function getClaimAmount(address _account) external view returns (uint256) {
+        return claims[_account];
     }
 }

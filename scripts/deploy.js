@@ -38,8 +38,8 @@ async function main() {
     process.env.TOKEN_AMOUNT_5
   ];
 
-  console.log(addr_array);
-  console.log(bals_array);
+  // console.log(addr_array);
+  // console.log(bals_array);
   const token = await Token.deploy(
     addr_array, bals_array
   );
