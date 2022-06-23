@@ -15,8 +15,7 @@ npm install
 
 We need to setup the .env file as like below
 <!-- ![image description](https://ibb.co/d6ygqM5) -->
-<img src="https://ibb.co/d6ygqM5"/>
-
+<img src="https://i.ibb.co/5vVFy4R/env.png" alt="env" border="0">
 
 Then, on a new terminal, go to the repository's root folder and run this to
 deploy your contract:
