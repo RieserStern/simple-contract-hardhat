@@ -26,6 +26,9 @@ contract Token {
     // A mapping is a values of claims for each account
     mapping(address => uint256) claims;
 
+    // Event when claim
+    event Claimed(address _account, uint256 _amount);
+
     /**
      * Contract initialization.
      *
@@ -84,10 +87,13 @@ contract Token {
      */
 
     function claim(uint256 _amount) external {
-        //event
+
         require(_amount <= claims[msg.sender], "claim overflow!");
         claims[msg.sender] = claims[msg.sender] - _amount;
         balances[msg.sender] += _amount;
+
+        //event
+        emit Claimed(msg.sender, _amount);
     }
 
     /**

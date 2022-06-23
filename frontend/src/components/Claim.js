@@ -12,9 +12,10 @@ export function Claim({ claimTokens }) {
 
             const formData = new FormData(event.target);
             const claimAmount = formData.get("claimAmount");
+            console.log(claimAmount);
 
             claimTokens(claimAmount);
-            
+
             }}
         >
             <div className="form-group">

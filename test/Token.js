@@ -155,6 +155,7 @@ describe("Token contract", function () {
   describe("Claim", function () {
     it("Should get amount after claim", async function() {
       
+      // Address1
       let address_1_claimAmount = await hardhatToken.getClaimAmount(addr_array[0]);
       expect(address_1_claimAmount).to.equal(process.env.TOKEN_AMOUNT_1);
 
@@ -164,6 +165,18 @@ describe("Token contract", function () {
 
       address_1_claimAmount = await hardhatToken.getClaimAmount(addr_array[0]);
       expect(address_1_claimAmount).to.equal(process.env.TOKEN_AMOUNT_1 - 500);
+
+
+      // Address2 
+      let address_2_claimAmount = await hardhatToken.getClaimAmount(addr_array[1]);
+      expect(address_2_claimAmount).to.equal(process.env.TOKEN_AMOUNT_2);
+
+      console.log(address_2_claimAmount);
+
+      await hardhatToken.connect(addr1).claim(100);
+
+      address_2_claimAmount = await hardhatToken.getClaimAmount(addr_array[1]);
+      expect(address_2_claimAmount).to.equal(process.env.TOKEN_AMOUNT_2 - 100);
     })
   });
 });

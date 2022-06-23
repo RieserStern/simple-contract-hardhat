@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const hre = require('hardhat');
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
 async function main() {
@@ -11,24 +11,13 @@ async function main() {
         " option '--network localhost'"
     );
   }
-
-  // ethers is available in the global scope
-  const [deployer] = await ethers.getSigners();
-  console.log(
-    "Deploying the contracts with the account:",
-    await deployer.getAddress()
-  );
-
-  console.log("Account balance:", (await deployer.getBalance()).toString());
-
-  const Token = await ethers.getContractFactory("Token");
-
+  const Token = await hre.ethers.getContractFactory("Token");
   let addr_array = [
-    process.env.TOKEN_ADDRESS_1, 
-    process.env.TOKEN_ADDRESS_2,
-    process.env.TOKEN_ADDRESS_3,
-    process.env.TOKEN_ADDRESS_4,
-    process.env.TOKEN_ADDRESS_5
+    process.env.RINKEBY_ADDRESS_1, 
+    process.env.RINKEBY_ADDRESS_2,
+    process.env.RINKEBY_ADDRESS_3,
+    process.env.RINKEBY_ADDRESS_4,
+    process.env.RINKEBY_ADDRESS_5
   ];
   let bals_array = [
     process.env.TOKEN_AMOUNT_1, 
@@ -43,7 +32,6 @@ async function main() {
   const token = await Token.deploy(
     addr_array, bals_array
   );
-
   console.log("Token address:", token.address);
 
   // We also save the contract's artifacts and address in the frontend directory
