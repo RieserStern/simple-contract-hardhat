@@ -24,6 +24,14 @@ deploy your contract:
 
 ```sh
 npx hardhat run scripts/deploy.js --network rinkeby
+```
 
+Finally, we can run the frontend with:
+
+```sh
+cd frontend
+npm install
+npm start
+```
 
 
