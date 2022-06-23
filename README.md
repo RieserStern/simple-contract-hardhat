@@ -14,7 +14,8 @@ npm install
 ```
 
 We need to setup the .env file as like below
-![image description](https://ibb.co/d6ygqM5)
+<!-- ![image description](https://ibb.co/d6ygqM5) -->
+<img src="https://ibb.co/d6ygqM5"/>
 
 
 Then, on a new terminal, go to the repository's root folder and run this to
