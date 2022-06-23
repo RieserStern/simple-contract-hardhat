@@ -102,13 +102,16 @@ export class Dapp extends React.Component {
             <h1>
               {this.state.tokenData.name} ({this.state.tokenData.symbol})
             </h1>
-            <p>
-              Welcome <b>{this.state.selectedAddress}</b>, you have{" "}
+            <br></br>
+            <h3>
+              Your MetaMask Wallet Address <b>{this.state.selectedAddress}</b>.
+            </h3>
+            <br></br>
+            <h2>
               <b>
-                {this.state.balance.toString()} {this.state.tokenData.symbol}
-              </b>
-              .
-            </p>
+              Your MetaMask Wallet Balance{" "} {this.state.balance.toString()} {this.state.tokenData.symbol}
+              </b>.
+            </h2>
           </div>
         </div>
 
