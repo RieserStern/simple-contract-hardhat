@@ -6,3 +6,10 @@ This project is intended to use Hardhat, but you can follow the project on your 
 
 The first things you need to do are cloning this repository and installing its
 dependencies:
+
+```sh
+git clone https://github.com/RieserStern/simple-contract-hardhat.git
+cd simple-contract-hardhat
+npm install
+```
+
